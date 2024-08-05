@@ -28,7 +28,7 @@ public class CustomerDAOImpl implements CustomerDAO {
             ps.setString(5, customerDTO.getPhone());
 
             if (ps.executeUpdate() != 0) {
-                return "Student save successfully";
+                return "Customer save successfully";
             }else {
                 return "Save customer failed";
             }

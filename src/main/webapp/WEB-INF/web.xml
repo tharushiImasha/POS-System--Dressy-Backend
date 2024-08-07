@@ -9,15 +9,6 @@
         <param-value>http://127.0.0.1:5501</param-value>
     </context-param>
 
-<!--    <filter>-->
-<!--        <filter-name>CORSFilter</filter-name>-->
-<!--        <filter-class>lk.ijse.gdse68.clothingpos.filter.CORSFilter</filter-class>-->
-<!--    </filter>-->
-<!--    <filter-mapping>-->
-<!--        <filter-name>CORSFilter</filter-name>-->
-<!--        <url-pattern>/*</url-pattern>-->
-<!--    </filter-mapping>-->
-
     <resource-ref>
         <description>DB Connection</description>
         <res-ref-name>jdbc/customerReg</res-ref-name>

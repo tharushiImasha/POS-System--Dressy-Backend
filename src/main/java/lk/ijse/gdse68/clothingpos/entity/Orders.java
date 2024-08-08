@@ -1,11 +1,11 @@
-package lk.ijse.gdse68.clothingpos.dto;
+package lk.ijse.gdse68.clothingpos.entity;
 
 import jakarta.json.bind.annotation.JsonbProperty;
+import lk.ijse.gdse68.clothingpos.dto.OrderDetailsDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class OrdersDTO {
+public class Orders {
     private String order_id;
     private String cus_id;
     private double total;
@@ -21,7 +21,7 @@ public class OrdersDTO {
     @JsonbProperty("order_details")
     private List<OrderDetailsDTO> order_details;
 
-    public OrdersDTO(String order_id, String cus_id, double total, LocalDate date) {
+    public Orders(String order_id, String cus_id, double total, LocalDate date) {
         this.order_id = order_id;
         this.cus_id = cus_id;
         this.total = total;

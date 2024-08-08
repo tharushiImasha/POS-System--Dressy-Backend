@@ -7,8 +7,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lk.ijse.gdse68.clothingpos.bo.PlaceOrderBO;
-import lk.ijse.gdse68.clothingpos.bo.impl.PlaceOrderBOImpl;
+import lk.ijse.gdse68.clothingpos.bo.BOFactory;
+import lk.ijse.gdse68.clothingpos.bo.custom.PlaceOrderBO;
 import lk.ijse.gdse68.clothingpos.dto.OrdersDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +23,8 @@ import java.util.List;
 
 @WebServlet(urlPatterns = "/order", loadOnStartup = 2)
 public class OrderController extends HttpServlet {
+
+    PlaceOrderBO orderBO = (PlaceOrderBO) BOFactory.getBoFactory().getSuperBO(BOFactory.BOType.ORDER);
 
     Connection connection;
     static Logger logger = LoggerFactory.getLogger(OrderController.class);
@@ -52,13 +54,17 @@ public class OrderController extends HttpServlet {
             Jsonb jsonb = JsonbBuilder.create();
             OrdersDTO ordersDTO = jsonb.fromJson(req.getReader(), OrdersDTO.class);
 
-            PlaceOrderBO placeOrderBO = new PlaceOrderBOImpl();
-            String result = placeOrderBO.saveOrder(ordersDTO, connection);
+//            PlaceOrderBO placeOrderBO = new PlaceOrderBOImpl();
 
-            resp.setStatus(HttpServletResponse.SC_CREATED);
+            boolean isSaved = orderBO.saveOrder(ordersDTO, connection);
+
+            if (isSaved) {
+                logger.info("Order saved successfully");
+                resp.setStatus(HttpServletResponse.SC_CREATED);
+            }
+
             resp.setContentType("application/json");
             jsonb.toJson(ordersDTO, writer);
-            logger.info("Order saved successfully: {}", result);
 
         } catch (Exception e) {
             logger.error("Error saving order", e);
@@ -71,7 +77,7 @@ public class OrderController extends HttpServlet {
         try (var writer = resp.getWriter()) {
             Jsonb jsonb = JsonbBuilder.create();
 
-            PlaceOrderBOImpl orderBO = new PlaceOrderBOImpl();
+//            PlaceOrderBOImpl orderBO = new PlaceOrderBOImpl();
             List<OrdersDTO> ordersDTOS = orderBO.getAllOrder(connection);
 
             resp.setContentType("application/json");
@@ -84,14 +90,4 @@ public class OrderController extends HttpServlet {
         }
     }
 
-    @Override
-    public void destroy() {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            logger.error("Error closing connection: {}", e.getMessage());
-        }
-    }
 }

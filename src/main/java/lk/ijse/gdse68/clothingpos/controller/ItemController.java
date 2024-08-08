@@ -7,7 +7,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lk.ijse.gdse68.clothingpos.bo.impl.ItemBOImpl;
+import lk.ijse.gdse68.clothingpos.bo.BOFactory;
+import lk.ijse.gdse68.clothingpos.bo.custom.ItemBO;
 import lk.ijse.gdse68.clothingpos.dto.ItemDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,8 @@ import java.util.Map;
 
 @WebServlet(urlPatterns = "/item", loadOnStartup = 2)
 public class ItemController extends HttpServlet {
+
+    ItemBO itemBO = (ItemBO) BOFactory.getBoFactory().getSuperBO(BOFactory.BOType.ITEM);
 
     Connection connection;
     static Logger logger = LoggerFactory.getLogger(ItemController.class);
@@ -44,19 +47,25 @@ public class ItemController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (req.getContentType() == null || !req.getContentType().toLowerCase().startsWith("application/json")) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
+
+        resp.setContentType("application/json");
 
         try (var writer = resp.getWriter()) {
             Jsonb jsonb = JsonbBuilder.create();
             ItemDTO itemDTO = jsonb.fromJson(req.getReader(), ItemDTO.class);
 
-            ItemBOImpl itemBO = new ItemBOImpl();
+            boolean isSave = itemBO.saveItem(itemDTO, connection);
+            if (isSave) {
+                writer.write("Item saved successfully");
+                logger.info("Item saved successfully");
+                resp.setStatus(HttpServletResponse.SC_CREATED);
+            }else {
+                System.out.println("Customer not saved");
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Failed to save item");
+            }
 
-            writer.write(itemBO.saveItem(itemDTO, connection));
-            logger.info("Item saved successfully");
-            resp.setStatus(HttpServletResponse.SC_CREATED);
-
-            resp.setContentType("application/json");
             jsonb.toJson(itemDTO, writer);
 
         }catch (Exception e) {
@@ -72,7 +81,7 @@ public class ItemController extends HttpServlet {
             Jsonb jsonb = JsonbBuilder.create();
             ItemDTO itemDTO = jsonb.fromJson(req.getReader(), ItemDTO.class);
 
-            ItemBOImpl itemBO = new ItemBOImpl();
+//            ItemBOImpl itemBO = new ItemBOImpl();
 
             if (itemBO.updateItem(itemDTO.getCostume_id(), itemDTO, connection)) {
                 resp.setStatus(HttpServletResponse.SC_NO_CONTENT); // 204 No Content for successful update with no response body
@@ -90,7 +99,7 @@ public class ItemController extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try(var writer = resp.getWriter()) {
             var costumeId = req.getParameter("costume_id");
-            ItemBOImpl itemBO = new ItemBOImpl();
+//            ItemBOImpl itemBO = new ItemBOImpl();
 
             if (itemBO.deleteItem(costumeId, connection)) {
                 resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
@@ -109,7 +118,7 @@ public class ItemController extends HttpServlet {
         try (var writer  = resp.getWriter()){
             Jsonb jsonb = JsonbBuilder.create();
 
-            ItemBOImpl itemBO = new ItemBOImpl();
+//            ItemBOImpl itemBO = new ItemBOImpl();
             List<ItemDTO> itemDTOS = itemBO.getAllItems(connection);
 
             resp.setContentType("application/json");

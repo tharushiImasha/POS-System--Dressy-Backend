@@ -32,35 +32,17 @@ The frontend for this project is available at: [Dressy Frontend Repository](http
 
 ### Setup Instructions
 
-1. **Clone the repository:**
-    ```bash
-    git clone https://github.com/yourusername/dressy-pos-backend.git
-    cd dressy-pos-backend
-    ```
 
-2. **Configure the Database:**
-    - Create a MySQL database:
-      ```sql
-      CREATE DATABASE Dressy;
-      ```
-    - Update the database connection settings in the `persistence.xml` file located in `src/main/resources/META-INF/`:
-      ```xml
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/Dressy"/>
-      <property name="javax.persistence.jdbc.user" value="yourusername"/>
-      <property name="javax.persistence.jdbc.password" value="yourpassword"/>
-      ```
+### Key Points:
+- **Clone the repository:** Provides the initial step to get the source code.
+- **Navigate to the project directory:** Directs the user to move into the correct folder.
+- **Build the backend:** Instructs on how to build the Java backend using Maven.
+- **Deploy the backend:** Covers deployment on a Java EE server.
+- **Run the frontend:** Details how to start the frontend by opening the `index.html` file.
+- **View the application:** Tells users how to access the application through their browser.
 
-3. **Build the Project:**
-    - Use Maven to build the project:
-      ```bash
-      mvn clean install
-      ```
+This concise format helps users quickly set up and run your POS system without overwhelming them with details.
 
-4. **Deploy to Server:**
-    - Deploy the generated `.war` file to your Java EE server (e.g., Apache Tomcat).
-
-5. **Run the Server:**
-    - Start your Java EE server, and the backend will be operational.
 
 ## API Documentation
 
@@ -134,7 +116,7 @@ You can find the detailed API documentation [API Documentation](https://document
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Feedbacks
 

@@ -134,7 +134,7 @@ You can find the detailed API documentation [API Documentation](https://document
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE) file for details.
 
 ## Feedbacks
 
